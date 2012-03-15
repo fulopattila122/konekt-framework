@@ -160,9 +160,9 @@ final class Konekt{
    
    
    /**
-    * Returns the Classname of a Helper class based on it's `nice` notation
+    * Obtains the Classname of a Helper class based on it's `nice` notation
     *
-    *
+    * @return string The Classname of a Helper class
     */
    private static function _getHelperClassName($name)
    {
@@ -227,7 +227,7 @@ final class Konekt{
    /**
     * Class Autoloader function
     *
-    *
+    * @return bool   Returns false if couldn't load the requested class
     */
    public static function autoload($class)
    {
@@ -248,3 +248,4 @@ final class Konekt{
 
    spl_autoload_register(array('Konekt', 'autoload'));
    Konekt::init();
+
