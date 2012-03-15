@@ -1,12 +1,30 @@
 <?php
-
 /**
- * Bootstrap Doctrine.php, register autoloader specify
- * configuration attributes and load models.
+ * Konekt.php contains the implementation of the main hub class of the Konekt Framework
+ *
+ *
+ * @category    Konekt
+ * @package     Framework
+ * @copyright   Copyright (c) 2011 - 2012 Attila Fülöp
+ * @author      Attila Fülöp
+ * @license     GNU LGPL v3 http://www.opensource.org/licenses/lgpl-3.0.html
+ * @version     $Revision-Id$ $Date$
+ * @since       2011-12-11
+ *
  */
 
 define('DS', DIRECTORY_SEPARATOR);
 
+/**
+ * The main `hub` class of the Konekt Framework
+ * 
+ * This class - that doesn't need to be instanciated - is the centre of
+ * the Konekt Framework. It serves as bootstrap, initializes the App
+ * singleton, registers the class autoloader, handles the Registry,
+ * and serves as factory for helpers.
+ *
+ * @package     Konekt
+ */
 final class Konekt{
 
    const APP_ROOT_DIR  = 'app';
@@ -51,7 +69,10 @@ final class Konekt{
    }
    
    /**
-    * Set application root absolute path. Please note that the whole framework heavily relies on this setting and with this implementation the app must be in a directory just under the DocumentRoot (eg. public_html/app). If you want to move the application please change this accordingly.
+    * Set application root absolute path. Please note that the whole framework heavily relies on
+    * this setting and with this implementation the app must be in a directory just under the
+    * DocumentRoot (eg. public_html/app). If you want to move the application please change this
+    * accordingly.
     *
     * @return bool True if already set or successfully set, false otherwise
     */
@@ -62,14 +83,21 @@ final class Konekt{
          return true;
       }
 
-      self::$_rootDir = dirname(dirname(__FILE__));
+      self::$_rootDir = dirname(dirname(dirname(__FILE__)));
       self::$_rootDir = realpath(self::$_rootDir);
 
       return is_dir(self::$_rootDir) && is_readable(self::$_rootDir) ? true : false;
    }
    
    /**
-    * Returns the root directory 
+    * Returns the root directory.
+    * 
+    * To be implemented: The app directory has to be movable. This method has to try to guess itself
+    * in the following order:
+    * 1.) root should be one dir higher than app/
+    * 2.) root should be app/../www/ or app/../httpdocs/ or app/../htdocs/ or app/../public_html/
+    * 3.) Read from config
+    * 4.) Die if nothing else remains :)
     *
     * @return string The Root Directory of `All` (usually one level higher then `app`)
     */
@@ -163,7 +191,7 @@ final class Konekt{
      * Retrieve helper object
      *
      * @param string $name the helper name (eg. `konekt_core/default`) if the part before the slash (/) doesn't contain vendor prefix (ie. no `_` in the string, then the default `konekt_` prefix gets added to it
-     * @return Konekt_Core_Helper_Abstract
+     * @return Konekt_Core_Helper_Abstract   Returns a Helper class instance that is derived form Konekt_Core_Helper_Abstract
      */
    public static function helper($name)
    {
@@ -204,7 +232,7 @@ final class Konekt{
    public static function autoload($class)
    {
       $classPath = self::$_rootDir . DS . self::APP_ROOT_DIR . DS . str_replace('_', DS, $class) . '.php';
-      if (file_exists($classPath))
+      if (is_readable($classPath))
       {
          require ($classPath);
       }
@@ -220,5 +248,3 @@ final class Konekt{
 
    spl_autoload_register(array('Konekt', 'autoload'));
    Konekt::init();
-
-?>
