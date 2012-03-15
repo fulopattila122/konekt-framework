@@ -3,7 +3,8 @@
  * Browser.php contains the implementation of the Core Browser Model class
  *
  *
- * @package     Konekt
+ * @category    Konekt
+ * @package     Framework
  * @subpackage  Core
  * @copyright   Copyright (c) 2011 - 2012 Attila Fülöp
  * @author      Attila Fülöp
@@ -14,7 +15,15 @@
  */
 
 
-class Konekt_Core_Model_Browser
+/**
+ * The Browser Model class
+ * 
+ * @category   Konekt
+ * @package    Framework
+ * 
+ */
+
+class Konekt_Framework_Core_Model_Browser
 {
    /** @TODO: Add this advanced browser detection tool http://techpatterns.com/downloads/php_browser_detection.php */
    /** @var array */

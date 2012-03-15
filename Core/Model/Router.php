@@ -3,7 +3,8 @@
  * Router.php contains the implementation of the core Router class
  *
  *
- * @package     Konekt
+ * @category    Konekt
+ * @package     Framework
  * @subpackage  Core
  * @copyright   Copyright (c) 2012 Attila Fülöp
  * @author      Attila Fülöp
@@ -17,9 +18,10 @@
 /**
  * The Konekt core router class
  *
- * @package     Konekt
+ * @category   Konekt
+ * @package    Framework
  */
-class Konekt_Core_Model_Router
+class Konekt_Framework_Core_Model_Router
 {
    /**
     * Routing variable types
@@ -51,7 +53,7 @@ class Konekt_Core_Model_Router
    /**
     * The resolved controller instance
     * 
-    * @var Konekt_Core_Controller_Abstract
+    * @var Konekt_Framework_Core_Controller_Abstract
     */
    protected $_controller;
    
@@ -183,23 +185,29 @@ class Konekt_Core_Model_Router
       $parts  = explode('/', $name);
       $result = '';
       
+      //Vendor part
       foreach ( explode('_', $parts[0]) as $key )
       {
          $result .= ucfirst($key) . '_';
       }
-      
+      //Package part
       foreach ( explode('_', $parts[1]) as $key )
+      {
+         $result .= ucfirst($key) . '_';
+      }
+      //Module part
+      foreach ( explode('_', $parts[2]) as $key )
       {
          $result .= ucfirst($key) . '_';
       }
       
       $result .= 'Controller';
       
-      if (empty($parts[2]))
+      if (empty($parts[3]))
       {
          $result .= '_Default';
       }
-      else foreach ( explode('_', $parts[2]) as $key )
+      else foreach ( explode('_', $parts[3]) as $key )
       {
          $result .= '_'.ucfirst($key);
       }
@@ -212,14 +220,14 @@ class Konekt_Core_Model_Router
     *
     * @param string $route The resolved route string
     *
-    * @return Konekt_Core_Controller_Abstract|bool Returns a Controller class instance, or false
+    * @return Konekt_Framework_Core_Controller_Abstract|bool Returns a Controller class instance, or false
     */
    protected function _getController($route)
    {
       $ctrlClass = $this->_getControllerClassName($route);
       $this->_controller = new $ctrlClass;
       
-      if (!is_subclass_of($this->_controller, 'Konekt_Core_Controller_Abstract')) {
+      if (!is_subclass_of($this->_controller, 'Konekt_Framework_Core_Controller_Abstract')) {
          return false;
       }
       
@@ -237,7 +245,7 @@ class Konekt_Core_Model_Router
    protected function _getAction($route)
    {
       $parts   =  explode('/', $route);
-      $result  =  isset($parts[3]) ? $parts[3] : 'index';
+      $result  =  isset($parts[4]) ? $parts[4] : 'index';
       $result .=  'Action';
       
       return method_exists($this->_controller, $result) ? $result : false;      
@@ -266,7 +274,7 @@ class Konekt_Core_Model_Router
       }
       
       $controller = $this->_getController($route);
-      
+
       if (!$controller) {
          return $response->err404();
       }

@@ -1,7 +1,7 @@
 <?php
 
 
-class Konekt_Core_Controller_Abstract
+class Konekt_Framework_Core_Controller_Abstract
 {
 
    public function redirect($url)

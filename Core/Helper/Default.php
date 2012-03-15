@@ -1,6 +1,6 @@
 <?php
 
-class Konekt_Core_Helper_Default extends Konekt_Core_Helper_Abstract{
+class Konekt_Framework_Core_Helper_Default extends Konekt_Framework_Core_Helper_Abstract{
    
    /**
     * Encrypts the given value with the local encryption key
@@ -12,7 +12,7 @@ class Konekt_Core_Helper_Default extends Konekt_Core_Helper_Abstract{
    public function encrypt($value)
    {
       //dummy yay yet
-      return Konekt_Core_Model_Crypt::encrypt($value);
+      return Konekt_Framework_Core_Model_Crypt::encrypt($value);
    }
    
    /**
@@ -25,7 +25,7 @@ class Konekt_Core_Helper_Default extends Konekt_Core_Helper_Abstract{
    public function decrypt($value)
    {
       //dummy yay yet
-      return Konekt_Core_Model_Crypt::decrypt($value);
+      return Konekt_Framework_Core_Model_Crypt::decrypt($value);
    }
    
    /**
@@ -124,7 +124,7 @@ class Konekt_Core_Helper_Default extends Konekt_Core_Helper_Abstract{
     */
    public function fullPathRoot($path)
    {
-      return $this->_getFullPath($path, Konekt::getRootDir());
+      return $this->_getFullPath($path, Konekt::app()->getRootDir());
    }
    
    /**
@@ -241,6 +241,45 @@ class Konekt_Core_Helper_Default extends Konekt_Core_Helper_Abstract{
    
    
    /**
+    * Verifies if the parameter is an instance of a valid Konekt Framework class and retruns its parts
+    * 
+    * @param class   $object  The Object Instance
+    * 
+    * @return array  The classname parts (exploded by "_")
+    * @throws  Exception   If the parameter is not an object or is not a valid class, exception is thrown
+    * 
+    */
+   protected function _getClassnameParts($object)
+   {
+      if (!is_object($object)) {
+         throw new Exception('Parameter is not an object');
+      }
+      
+      $className = get_class($object);
+      $result = explode('_', $className);
+      //At least 5 : Vendor_Package_Module_<Model|Controller|View|Helper>_Class
+      if (count($result) < 5) {
+         throw new Exception('Invalid Class, probably invoked from a non Konekt Framework Class');
+      }
+      
+      return $result;
+   }
+   
+   /**
+    * Returns the vendor name that the object belongs to
+    *
+    * @param class $object The calling object instance that wants to know it's vendor
+    *
+    * @return string Returns the name of the vendor (Case Sensitive)
+    */
+   public function getMyVendor($object)
+   {
+      $r = $this->_getClassnameParts($object);
+      return $r[0];
+   }
+   
+   
+   /**
     * Returns the package name that the object belongs to
     *
     * @param class $object The calling object instance that wants to know it's package
@@ -249,18 +288,9 @@ class Konekt_Core_Helper_Default extends Konekt_Core_Helper_Abstract{
     */
    public function getMyPackage($object)
    {
-      if (!is_object($object)) {
-         throw new Exception('Parameter is not an object');
-      }
-      
-      $className = get_class($object);
-      $p = strpos($className, '_');
-      if ($p === false || $p < 1) {
-         throw new Exception('Invalid Class, probably invoked from a non Konekt Framework Class');
-      }
-      
-      return substr($className, 0, $p);
-   }
+      $r = $this->_getClassnameParts($object);
+      return $r[1];
+   } 
    
    /**
     * Returns the module name that the object belongs to
@@ -271,23 +301,8 @@ class Konekt_Core_Helper_Default extends Konekt_Core_Helper_Abstract{
     */
    public function getMyModule($object)
    {
-      if (!is_object($object)) {
-         throw new Exception('Parameter is not an object');
-      }
-      
-      $className = get_class($object);
-      $p = strpos($className, '_');
-      if ($p === false || $p < 1) {
-         throw new Exception('Invalid Class, probably invoked from a non Konekt Framework Class');
-      }
-      
-      $p2 = strpos($className, '_', $p + 1);
-      if ($p2 === false || $p2 <= $p)
-      {
-         throw new Exception('Invalid Class, probably invoked from a non Konekt Framework Class');
-      }
-      
-      return substr($className, $p + 1, $p2 - $p - 1);
+      $r = $this->_getClassnameParts($object);
+      return $r[2];
    } 
    
 }

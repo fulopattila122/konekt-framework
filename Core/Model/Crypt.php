@@ -2,8 +2,9 @@
 /**
  * Crypt.php contains the implementation of the built-in Encrypt/Decrypt class.
  *
- *
- * @package     Konekt
+ * 
+ * @category    Konekt
+ * @package     Framework
  * @subpackage  Core
  * @copyright   Copyright (c) 2011 - 2012 Attila Fülöp
  * @author      Attila Fülöp
@@ -16,9 +17,10 @@
 /**
  * The basic built-in encrypt/decrypt class
  *
- * @package     Konekt
+ * @category   Konekt
+ * @package    Framework
  */
-class Konekt_Core_Model_Crypt{
+class Konekt_Framework_Core_Model_Crypt{
 
    public static function decrypt($value)
    {

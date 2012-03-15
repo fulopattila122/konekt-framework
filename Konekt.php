@@ -23,29 +23,30 @@ define('DS', DIRECTORY_SEPARATOR);
  * singleton, registers the class autoloader, handles the Registry,
  * and serves as factory for helpers.
  *
- * @package     Konekt
+ * @category    Konekt
+ * @package     Framework
  */
 final class Konekt{
 
-   const APP_ROOT_DIR  = 'app';
-   const VAR_ROOT_DIR  = 'var';
-   const ETC_ROOT_DIR  = 'etc';
-   const LIB_ROOT_DIR  = 'lib';
+   const VAR_ROOT_DIR   = 'var';
+   const ETC_ROOT_DIR   = 'etc';
+   const LIB_ROOT_DIR   = 'lib';
+   const CODE_ROOT_DIR  = 'code';
    
    /**
     * Application model
     *
-    * @var Konekt_Core_Model_App
+    * @var Konekt_Framework_Core_Model_App
     */
-   static $_app;
+   static private $_app;
    
    
    /**
-    * Application Root Directory
+    * Application Directory
     *
     * @var string
     */
-   static $_rootDir;
+   static private $_appDir;
    
    /**
    * Registry Array
@@ -57,58 +58,31 @@ final class Konekt{
    /**
     * Get initialized application object.
     *
-    * @return Konekt_Core_Model_App
+    * @return Konekt_Framework_Core_Model_App
     */   
    public static function app()
    {
       if (NULL === self::$_app)
       {
-         self::$_app = new Konekt_Core_Model_App();
+         self::$_app = new Konekt_Framework_Core_Model_App();
        }
       return self::$_app;
    }
    
-   /**
-    * Set application root absolute path. Please note that the whole framework heavily relies on
-    * this setting and with this implementation the app must be in a directory just under the
-    * DocumentRoot (eg. public_html/app). If you want to move the application please change this
-    * accordingly.
-    *
-    * @return bool True if already set or successfully set, false otherwise
-    */
-   public static function setRootDir()
-   {
-      if (self::$_rootDir)
-      {
-         return true;
-      }
-
-      self::$_rootDir = dirname(dirname(dirname(__FILE__)));
-      self::$_rootDir = realpath(self::$_rootDir);
-
-      return is_dir(self::$_rootDir) && is_readable(self::$_rootDir) ? true : false;
-   }
    
    /**
-    * Returns the root directory.
+    * Sets the Application Directory and checks if is readable
     * 
-    * To be implemented: The app directory has to be movable. This method has to try to guess itself
-    * in the following order:
-    * 1.) root should be one dir higher than app/
-    * 2.) root should be app/../www/ or app/../httpdocs/ or app/../htdocs/ or app/../public_html/
-    * 3.) Read from config
-    * 4.) Die if nothing else remains :)
-    *
-    * @return string The Root Directory of `All` (usually one level higher then `app`)
+    * @return bool  Return true on success false on failure
     */
-   public static function getRootDir()
+   protected static function _setAppDir()
    {
-      if (!self::$_rootDir)
-      {
-         self::setRootDir();
-      }
-      return self::$_rootDir;
+      self::$_appDir = dirname(dirname(dirname(dirname(__FILE__))));
+      self::$_appDir = realpath(self::$_appDir);
+
+      return is_dir(self::$_appDir) && is_readable(self::$_appDir) ? true : false;
    }
+   
    
    /**
    * Register a new entry
@@ -199,7 +173,7 @@ final class Konekt{
       $bzz = explode('/', $name);
       if (strpos($bzz[0], '_') === false)
       {
-         $name = "konekt_$name";
+         $name = "konekt_framework_$name";
       }
       $registryKey = '_helper/' . $name;
       if (!self::registry($registryKey))
@@ -216,12 +190,12 @@ final class Konekt{
     */
    public static function init()
    {
-      if (!self::setRootDir())
+      if (!self::_setAppDir())
       {
-         die('Failed to initialize Application root directory');
+         throw new Exception('Failed to initialize Application root directory');
       }
-      self::app()->init(self::getRootDir(), self::APP_ROOT_DIR,
-         self::VAR_ROOT_DIR, self::ETC_ROOT_DIR, self::LIB_ROOT_DIR);
+      self::app()->init(self::$_appDir, self::VAR_ROOT_DIR, self::ETC_ROOT_DIR,
+                         self::LIB_ROOT_DIR, self::CODE_ROOT_DIR);
    }
    
    /**
@@ -231,7 +205,8 @@ final class Konekt{
     */
    public static function autoload($class)
    {
-      $classPath = self::$_rootDir . DS . self::APP_ROOT_DIR . DS . str_replace('_', DS, $class) . '.php';
+      $classPath = self::$_appDir . DS . self::CODE_ROOT_DIR . DS . str_replace('_', DS, $class) . '.php';
+
       if (is_readable($classPath))
       {
          require ($classPath);

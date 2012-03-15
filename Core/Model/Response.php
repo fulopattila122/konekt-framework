@@ -3,7 +3,8 @@
  * Response.php contains the implementation of core Response class
  *
  *
- * @package     Konekt
+ * @category    Konekt
+ * @package     Framework
  * @subpackage  Core
  * @copyright   Copyright (c) 2012 Attila Fülöp
  * @author      Attila Fülöp
@@ -17,9 +18,10 @@
 /**
  * The core Response Class
  *
- * @package     Konekt
+ * @caegory    Konekt
+ * @package    Framework
  */
-class Konekt_Core_Model_Response
+class Konekt_Framework_Core_Model_Response
 {
    const DEFAULT_TEMPLATE_BASE = 'konekt_core_errordoc_%d.tpl';
    
@@ -236,6 +238,7 @@ class Konekt_Core_Model_Response
       else
       {
          echo "<h1>Houston</h1>\n<p>We have a problem here</p>\n";
+         print_r( $this->_smarty->template_dir);
       }
       
       return true;

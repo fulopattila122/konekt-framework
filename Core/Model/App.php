@@ -3,7 +3,8 @@
  * App.php contains the implementation of the Konekt Framework's Application class
  *
  *
- * @package     Konekt
+ * @category    Konekt
+ * @package     Framework
  * @subpackage  Core
  * @copyright   Copyright (c) 2011 - 2012 Attila Fülöp
  * @author      Attila Fülöp
@@ -20,10 +21,11 @@
  * It handles some basic settings, config, modules, Smarty and Doctrine
  * along with the Database connection.
  *
- * @package     Konekt
+ * @category    Konekt
+ * @package     Framework
  */
 
-class Konekt_Core_Model_App{
+class Konekt_Framework_Core_Model_App{
 
    const ANY_COUNTRY             = 'XX';
 
@@ -63,9 +65,16 @@ class Konekt_Core_Model_App{
    protected $_libDir;
    
    /**
+    * Code Base Directory
+    *
+    * @var string
+    */
+   protected $_codeDir;
+   
+   /**
     * The Configuration
     *
-    * @var Konekt_Core_Model_Config
+    * @var Konekt_Framework_Core_Model_Config
     */
    protected $_config;
    
@@ -93,21 +102,21 @@ class Konekt_Core_Model_App{
    /**
     * The Request Singleton
     *
-    * @var Konekt_Core_Model_Request
+    * @var Konekt_Framework_Core_Model_Request
     */
    protected $_request = NULL;
    
    /**
     * The Response Singleton
     *
-    * @var Konekt_Core_Model_Response
+    * @var Konekt_Framework_Core_Model_Response
     */
    protected $_response = NULL;
    
    /**
     * The Router Singleton
     *
-    * @var Konekt_Core_Model_Router
+    * @var Konekt_Framework_Core_Model_Router
     */
    protected $_router = NULL;
    
@@ -177,20 +186,21 @@ class Konekt_Core_Model_App{
    
    public function getModuleDirectory($moduleName)
    {
-      return $this->_appDir . DS . str_replace('_', DS, $moduleName);
+      return $this->_codeDir . DS . str_replace('_', DS, $moduleName);
    }
    
    private function initModule($moduleName)
    {
       $modDir = $this->getModuleDirectory($moduleName);
       //Load Module's Doctrine Entities
-      $entDir = $modDir . DS . Konekt_Core_Model_Config::DOCTRINE_ENTITIES_DIR;
-      if (is_dir($entDir))
+      $entDir = $modDir . DS . Konekt_Framework_Core_Model_Config::DOCTRINE_ENTITIES_DIR;
+
+      if (is_dir($entDir) && ! $this->_config->getValue('core/nosql'))
       {
          Doctrine_Core::loadModels($entDir);
       }
       //Add Module's Smarty Directory
-      $tplDir = $modDir . DS . Konekt_Core_Model_Config::SMARTY_REL_DIR;
+      $tplDir = $modDir . DS . Konekt_Framework_Core_Model_Config::SMARTY_REL_DIR;
       if (is_dir($tplDir))
       {
          $this->getResponse()->addTemplateDir($tplDir);
@@ -242,33 +252,51 @@ class Konekt_Core_Model_App{
    /**
     * Initializes the Konekt Application including Doctrine and Smarty
     *
-    * @param string $rootDir    The Application top level directory (app/../)
-    * @param string $appDirName The name of the app directory (usually `app`)
-    * @param string $varDirName The name of the var directory (usually `var`)
-    * @param string $etcDirName The name of the etc directory (usually `etc`)
-    * @param string $libDirName The name of the lib directory (usually `lib`)
+    * @param string $appDir      The app directory
+    * @param string $varDirName  The name of the var directory (usually `var`)
+    * @param string $etcDirName  The name of the etc directory (usually `etc`)
+    * @param string $libDirName  The name of the lib directory (usually `lib`)
+    * @param string $codeDirName The name of the code directory (usually `code`)
     *
     */  
-   public function init($rootDir, $appDirName, $varDirName, $etcDirName, $libDirName)
+   public function init($appDir, $varDirName, $etcDirName, $libDirName, $codeDirName)
    {
-      $this->_rootDir = $rootDir;      
-      $this->_appDir  = $rootDir . DS . $appDirName;
+      $this->_appDir  = $appDir;
       $this->_varDir  = $this->_appDir . DS . $varDirName;
       $this->_etcDir  = $this->_appDir . DS . $etcDirName;
-      $this->_libDir  = $this->_appDir . DS
+      $this->_codeDir = $this->_appDir . DS . $codeDirName;
+      $this->_libDir  = $this->_codeDir . DS
+         . Konekt::helper('core')->getMyVendor($this)  . DS
          . Konekt::helper('core')->getMyPackage($this) . DS
-         . Konekt::helper('core')->getMyModule($this) . DS
+         . Konekt::helper('core')->getMyModule($this)  . DS
          . $libDirName;
 
-      $this->setupDoctrineClasses();         
-      $this->_config = new Konekt_Core_Model_Config();
-      $this->setupDoctrineConnection();
+      $this->setupDoctrineClasses();
+      
+      $this->_config = new Konekt_Framework_Core_Model_Config();
+      $this->_rootDir = realpath($appDir . DS . $this->_config->getValue('core/rootDir','../'));
+      
+      if (!$this->_config->getValue('core/nosql')) {
+         $this->setupDoctrineConnection();
+      }
             
-      foreach ($this->getModules() as $module => $params)
-      {
+      foreach ($this->getModules() as $module => $params) {
          $this->initModule($module);
       }
    }
+   
+   
+   /**
+    * Returns the root directory.
+    * 
+    *
+    * @return string The Document Root Directory (usually one level higher then `app`)
+    */
+   public static function getRootDir()
+   {
+      return self::$_rootDir;
+   }
+   
  
    /**
     * Returns The Application base directory (<ROOT_PATH>/app/) without trailing slash
@@ -312,9 +340,10 @@ class Konekt_Core_Model_App{
       }
       else
       {
-         return $this->_appDir . DS
+         return $this->_codeDir . DS
+            . Konekt::helper('core')->getMyVendor($object)  . DS
             . Konekt::helper('core')->getMyPackage($object) . DS
-            . Konekt::helper('core')->getMyModule($object) . DS
+            . Konekt::helper('core')->getMyModule($object)  . DS
             . Konekt::LIB_ROOT_DIR;
       }
    }
@@ -323,14 +352,14 @@ class Konekt_Core_Model_App{
     * Returns the Config Singleton. In case it's not initialized, it
     * gets created. Note that this should happen during init().
     *
-    * @return Konekt_Core_Model_Config The initialized config object
+    * @return Konekt_Framework_Core_Model_Config The initialized config object
     */
    
    public function getConfig()
    {
       if (!$this->_config)
       {
-         $this->_config = new Konekt_Core_Model_Config();
+         $this->_config = new Konekt_Framework_Core_Model_Config();
       }
       return $this->_config;
    }
@@ -371,7 +400,7 @@ class Konekt_Core_Model_App{
     *
     * @param string $countryCode
     *
-    * @return Konekt_Core_Model_App Returns the self instance
+    * @return Konekt_Framework_Core_Model_App Returns the self instance
     */
    public function setCountry($countryCode)
    {
@@ -393,7 +422,7 @@ class Konekt_Core_Model_App{
     *
     * @param string $langCode
     *
-    * @return Konekt_Core_Model_App Returns the self instance
+    * @return Konekt_Framework_Core_Model_App Returns the self instance
     */
    public function setLanguage($langCode)
    {
@@ -404,7 +433,7 @@ class Konekt_Core_Model_App{
    /**
     * Returns the Request Singleton. For non web-based applications returns NULL
     *
-    * @return Konekt_Core_Model_Request
+    * @return Konekt_Framework_Core_Model_Request
     */
    public function getRequest()
    {
@@ -412,7 +441,7 @@ class Konekt_Core_Model_App{
       {
          if (!$this->runningFromCli())
          {
-            $this->_request = new Konekt_Core_Model_Request();
+            $this->_request = new Konekt_Framework_Core_Model_Request();
          }
       }
       
@@ -422,12 +451,12 @@ class Konekt_Core_Model_App{
    /**
     * Returns the Response Singleton
     *
-    * @return Konekt_Core_Model_Response
+    * @return Konekt_Framework_Core_Model_Response
     */
    public function getResponse()
    {
       if (!$this->_response) {
-         $this->_response = new Konekt_Core_Model_Response();
+         $this->_response = new Konekt_Framework_Core_Model_Response();
       }
       
       return $this->_response;
@@ -436,12 +465,12 @@ class Konekt_Core_Model_App{
    /**
     * Returns the Router Singleton
     *
-    * @return Konekt_Core_Model_Router
+    * @return Konekt_Framework_Core_Model_Router
     */
    public function getRouter()
    {
       if (!$this->_router) {
-         $this->_router = new Konekt_Core_Model_Router();
+         $this->_router = new Konekt_Framework_Core_Model_Router();
       }
       
       return $this->_router;

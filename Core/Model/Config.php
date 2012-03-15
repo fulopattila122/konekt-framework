@@ -3,7 +3,8 @@
  * Config.php contains the implementation of the Core Config Model class
  *
  *
- * @package     Konekt
+ * @category    Konekt
+ * @package     Framework
  * @subpackage  Core
  * @copyright   Copyright (c) 2011 - 2012 Attila Fülöp
  * @author      Attila Fülöp
@@ -17,10 +18,11 @@
 /**
  * Model Class for the Application's Configuration
  *
- * @package     Konekt
+ * @category    Konekt
+ * @package     Framework
  */
 
-class Konekt_Core_Model_Config{
+class Konekt_Framework_Core_Model_Config{
 
    const LOCAL_CONFIG            = 'local.yml';
    const CONF_REL_DIR            = 'etc';
@@ -69,7 +71,7 @@ class Konekt_Core_Model_Config{
       $node = $this->_config;
       foreach (explode('/', $name) as $key)
       {
-         $node = $node["$key"];
+         $node = isset($node["$key"]) ? $node["$key"] : null;
       }
       return isset($node) ? $node : $default;
    }

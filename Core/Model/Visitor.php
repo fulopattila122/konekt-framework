@@ -3,7 +3,8 @@
  * Visitor.php contains the implementation of the core Visistor class.
  *
  *
- * @package     Konekt
+ * @category    Konekt
+ * @package     Framework
  * @subpackage  Core
  * @copyright   Copyright (c) 2011 - 2012 Attila Fülöp
  * @author      Attila Fülöp
@@ -17,13 +18,14 @@
 /**
  * A class for getting information about the Visitor and his/her/its belongings
  *
- * @package     Konekt
+ * @category   Konekt
+ * @package    Framework
  */
 class Konekt_Core_Model_Visitor
 {
    const GEOIP_DIR = 'GeoIP';
    
-   /** @var Konekt_Core_Model_Browser */
+   /** @var Konekt_Framework_Core_Model_Browser */
    protected $_browser;
    
    /** @var array */
@@ -39,13 +41,13 @@ class Konekt_Core_Model_Visitor
    /**
     * Returns the Visitor's browser object
     *
-    * @return Konekt_Core_Model_Browser
+    * @return Konekt_Framework_Core_Model_Browser
     */
    function getBrowser()
    {
       if (!$this->_browser)
       {
-         $this->_browser = new Konekt_Core_Model_Browser();
+         $this->_browser = new Konekt_Framework_Core_Model_Browser();
       }
       return $this->_browser;
    }

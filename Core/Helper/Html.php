@@ -1,6 +1,6 @@
 <?php
 
-class Konekt_Core_Helper_Html extends Konekt_Core_Helper_Abstract{
+class Konekt_Framework_Core_Helper_Html extends Konekt_Framework_Core_Helper_Abstract{
    
    /**
     * Returns the array of images and their attributes from an html code snippet

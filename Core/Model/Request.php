@@ -3,7 +3,8 @@
  * Request.php contains the implementation of global Request class
  *
  *
- * @package     Konekt
+ * @category    Konekt
+ * @package     Framework
  * @subpackage  Core
  * @copyright   Copyright (c) 2012 Attila Fülöp
  * @author      Attila Fülöp
@@ -16,13 +17,14 @@
 /**
  * The Core Request Model
  *
- * @package     Konekt
+ * @category   Konekt
+ * @package    Framework
  */
-class Konekt_Core_Model_Request
+class Konekt_Framework_Core_Model_Request
 {   
    const GEOIP_DIR = 'GeoIP';
    
-   /** @var Konekt_Core_Model_Browser */
+   /** @var Konekt_Framework_Core_Model_Browser */
    protected $_browser;
    
    /** @var array */
@@ -44,13 +46,13 @@ class Konekt_Core_Model_Request
    /**
     * Returns the Visitor's browser Singleton
     *
-    * @return Konekt_Core_Model_Browser
+    * @return Konekt_Framework_Core_Model_Browser
     */
    function getBrowser()
    {
       if (!$this->_browser)
       {
-         $this->_browser = new Konekt_Core_Model_Browser();
+         $this->_browser = new Konekt_Framework_Core_Model_Browser();
       }
       return $this->_browser;
    }
