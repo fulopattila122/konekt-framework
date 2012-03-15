@@ -1,0 +1,2 @@
+If this module is loaded, it should setup autoloader to properly load
+pear packages from here
