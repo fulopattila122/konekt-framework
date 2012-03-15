@@ -238,7 +238,6 @@ class Konekt_Framework_Core_Model_Response
       else
       {
          echo "<h1>Houston</h1>\n<p>We have a problem here</p>\n";
-         print_r( $this->_smarty->template_dir);
       }
       
       return true;
