@@ -147,25 +147,24 @@ class Konekt_Framework_Core_Model_Router
    /**
     * Looks for a route matching the request
     *
-    * @param array $params  Variable to receive the parameters
-    *
     * @return string|bool  Returns the matching route or false if none found
     */
-   protected function _findRoute(&$params)
+   protected function _findRoute()
    {
       $result = false;
       
       if ('/' == $this->_uri || '' == $this->_uri)
       {
-         $result = $this->_routingTable['/']['controller'];
+         $result = $this->_routingTable['/'];
       }
       else
       {
          foreach ($this->_routingTable as $route => $settings)
          {
             if (preg_match(":^/?$route/?$:", $this->_uri, $a)) {
-               $result = $settings['controller'];
-               $params = array_merge($params, $a);
+               $result = array();
+               $result['controller'] = $settings['controller'];
+               $result['params']     = array_merge($settings['params'], $a);
                break;
             }
          }
@@ -264,8 +263,7 @@ class Konekt_Framework_Core_Model_Router
       $this->_normalize($source);
       $this->_prepare();
       
-      $params = array();
-      $route = $this->_findRoute($params);
+      $route = $this->_findRoute();
       
       $response = Konekt::app()->getResponse();
       
@@ -273,19 +271,19 @@ class Konekt_Framework_Core_Model_Router
          return $response->err404();
       }
       
-      $controller = $this->_getController($route);
+      $controller = $this->_getController($route['controller']);
 
       if (!$controller) {
          return $response->err404();
       }
       
-      $action = $this->_getAction($route);
+      $action = $this->_getAction($route['controller']);
       
       if (!$action) {
          return $response->err404();
       }
       
-      $controller->$action($params);
+      $controller->$action($route['params']);
       
       return $response;
    }

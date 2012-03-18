@@ -33,7 +33,7 @@ require_once("../../Konekt.php");
 
    function install($omitSql = false, $singleModule = null)
    {
-      $installer = new Konekt_Install_Model_Install();
+      $installer = new Konekt_Framework_Install_Model_Install();
       
       if ($singleModule)
       {

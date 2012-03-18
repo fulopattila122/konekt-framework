@@ -2,8 +2,9 @@
 /**
  * Install.php contains the implementation of Installer class 
  *
- *
- * @package     Konekt
+ * 
+ * @category    Konekt
+ * @package     Framework
  * @subpackage  Install
  * @copyright   Copyright (c) 2011 - 2012 Attila Fülöp
  * @author      Attila Fülöp
@@ -17,9 +18,10 @@
 /**
  * Class for installing Application and Modules
  *
- * @package     Konekt
+ * @category    Konekt
+ * @package     Framework
  */
-class Konekt_Install_Model_Install
+class Konekt_Framework_Install_Model_Install
 {
    const SCHEMA_FILE    = 'schema.yml';
    const FIXTURE_FILE   = 'data.yml';
@@ -29,8 +31,8 @@ class Konekt_Install_Model_Install
       try
       {
          $modDir    = Konekt::app()->getModuleDirectory($moduleName);
-         $confDir   = $modDir . DS . Konekt_Core_Model_Config::CONF_REL_DIR;
-         $modelsDir = $modDir . DS . Konekt_Core_Model_Config::DOCTRINE_ENTITIES_DIR;
+         $confDir   = $modDir . DS . Konekt_Framework_Core_Model_Config::CONF_REL_DIR;
+         $modelsDir = $modDir . DS . Konekt_Framework_Core_Model_Config::DOCTRINE_ENTITIES_DIR;
 
          /* Install Schema */
          if (file_exists($confDir . DS . self::SCHEMA_FILE))
