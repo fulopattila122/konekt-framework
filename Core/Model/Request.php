@@ -89,7 +89,7 @@ class Konekt_Framework_Core_Model_Request
     *
     * @return string
     */
-   public function domainRootUrl()
+   public function getDomainRootUrl()
    {
       $pageURL = 'http';
       if ($_SERVER["HTTPS"] == "on") {

@@ -353,7 +353,7 @@ class Konekt_Framework_Core_Model_Response
    public function err500($message = null)
    {
       $this->_statusCode                  = self::HTTP_INTERNAL_SERVER_ERROR;
-      $customUri && $this->_customMessage = $message;
+      $message && $this->_customMessage = $message;
       
       return $this;
    }
