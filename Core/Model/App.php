@@ -292,9 +292,9 @@ class Konekt_Framework_Core_Model_App{
     *
     * @return string The Document Root Directory (usually one level higher then `app`)
     */
-   public static function getRootDir()
+   public function getRootDir()
    {
-      return self::$_rootDir;
+      return $this->_rootDir;
    }
    
  
