@@ -358,4 +358,14 @@ class Konekt_Framework_Core_Model_Response
       return $this;
    }
    
+   /**
+    * Retruns the Smarty Object initiated for the Response
+    * 
+    * @return  Smarty
+    */
+    public function getSmarty()
+    {
+       return $this->_smarty;
+    }
+   
 }
