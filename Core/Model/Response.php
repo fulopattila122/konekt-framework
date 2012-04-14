@@ -6,11 +6,11 @@
  * @category    Konekt
  * @package     Framework
  * @subpackage  Core
- * @copyright   Copyright (c) 2012 Attila Fülöp
- * @author      Attila Fülöp
+ * @copyright   Copyright (c) 2012 Attila Fulop
+ * @author      Attila Fulop
  * @license     GNU LGPL v3 http://www.opensource.org/licenses/lgpl-3.0.html
- * @version     $Revision-Id$ $Date$
- * @since       2012-02-12
+ * @version     6 2012-04-14
+ * @since       2012-03-15
  *
  */
 
@@ -20,6 +20,7 @@
  *
  * @caegory    Konekt
  * @package    Framework
+ * @subpackage Core
  */
 class Konekt_Framework_Core_Model_Response
 {

@@ -6,10 +6,10 @@
  * @category    Konekt
  * @package     Framework
  * @subpackage  Core
- * @copyright   Copyright (c) 2011 - 2012 Attila Fülöp
- * @author      Attila Fülöp
+ * @copyright   Copyright (c) 2011 - 2012 Attila Fulop
+ * @author      Attila Fulop
  * @license     GNU LGPL v3 http://www.opensource.org/licenses/lgpl-3.0.html
- * @version     $Revision-Id$ $Date$
+ * @version     5 2012-04-14
  * @since       2011-12-11
  *
  */
@@ -23,6 +23,7 @@
  *
  * @category    Konekt
  * @package     Framework
+ * @subpackage  Core
  */
 
 class Konekt_Framework_Core_Model_App{
@@ -174,7 +175,6 @@ class Konekt_Framework_Core_Model_App{
     *
     * @return array The array of installed modules
     */
-   
    public function getModules()
    {
       if (!$this->_modules)
@@ -184,28 +184,43 @@ class Konekt_Framework_Core_Model_App{
       return $this->_modules;      
    }
    
+   /**
+    * Returns the Module directory based on the Module name.
+    * 
+    * @param   string   $moduleName The Name of the module
+    * 
+    * @return  string
+    */
    public function getModuleDirectory($moduleName)
    {
       return $this->_codeDir . DS . str_replace('_', DS, $moduleName);
    }
    
+   /**
+    * Initializes a Module.
+    * 
+    * @param   string   $moduleName The Name of the module
+    * 
+    * @return  void
+    */
    private function initModule($moduleName)
    {
       $modDir = $this->getModuleDirectory($moduleName);
-      //Load Module's Doctrine Entities
+      /** Loads Module's Doctrine Entities if there are any, and if sql is enabled */
       $entDir = $modDir . DS . Konekt_Framework_Core_Model_Config::DOCTRINE_ENTITIES_DIR;
 
       if (is_dir($entDir) && ! $this->_config->getValue('core/nosql'))
       {
          Doctrine_Core::loadModels($entDir);
       }
-      //Add Module's Smarty Directory
+      /** Adds Module's Smarty Directory */
       $tplDir = $modDir . DS . Konekt_Framework_Core_Model_Config::SMARTY_REL_DIR;
       if (is_dir($tplDir))
       {
          $this->getResponse()->addTemplateDir($tplDir);
       }
    }
+   
    
    /**
     * Starts a new named php session
@@ -221,6 +236,42 @@ class Konekt_Framework_Core_Model_App{
       if ($expire)
          session_cache_expire($expire);
       return session_start();
+   }
+   
+   
+   /**
+    * Closes the current session altogether. Unsets all session values and also sets the Session
+    * cookie to expire immediately.
+    * 
+    * @return void
+    * 
+    */
+   public function closeSession()
+   {
+      $_SESSION = array();
+
+      if (ini_get("session.use_cookies"))
+      {
+         $params = session_get_cookie_params();
+         setcookie(session_name(), '', time() - 42000,
+               $params["path"], $params["domain"],
+               $params["secure"], $params["httponly"]
+               );
+      }
+
+      session_destroy();
+   }
+   
+   
+   /**
+    * Checks whether session has been started or not. Check is being done by looking up for the session id.
+    * 
+    * @return  bool  Returns true if session exists, false otherwise
+    */
+   public function isSessionStarted()
+   {
+      $sid = session_id();
+      return !empty($sid);
    }
    
    /**

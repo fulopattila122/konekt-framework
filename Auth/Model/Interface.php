@@ -2,14 +2,14 @@
 /**
  * Interface.php contains the declaration of interface Konekt_Auth_Model_Interface
  *
- *
- * @package     Konekt
- * @subpackage  Konekt_Auth
- * @copyright   Copyright (c) 2012 Fülöp Attila
- * @author      Fülöp Attila
+ * @category    Konekt
+ * @package     Framework
+ * @subpackage  Auth
+ * @copyright   Copyright (c) 2012 Attila Fulop
+ * @author      Attila Fulop
  * @license     GNU LGPL v3 http://www.opensource.org/licenses/lgpl-3.0.html
- * @version     $Revision-Id$ $Date$
- * @since       2012-02-11
+ * @version     2 2012-04-14
+ * @since       2012-03-15
  *
  */
 
@@ -18,9 +18,11 @@
 /**
  * Interface for all Authentication classes
  *
- * @package     Konekt
+ * @category    Konekt
+ * @package     Framework
+ * @subpackage  Auth
  */
-interface Konekt_Auth_Model_Interface
+interface Konekt_Framework_Auth_Model_Interface
 {
    /**
     * Attempts login with the supplied credentials

@@ -5,10 +5,10 @@
  *
  * @category    Konekt
  * @package     Framework
- * @copyright   Copyright (c) 2011 - 2012 Attila Fülöp
- * @author      Attila Fülöp
+ * @copyright   Copyright (c) 2011 - 2012 Attila Fulop
+ * @author      Attila Fulop
  * @license     GNU LGPL v3 http://www.opensource.org/licenses/lgpl-3.0.html
- * @version     $Revision-Id$ $Date$
+ * @version     6 2012-04-14
  * @since       2011-12-11
  *
  */
