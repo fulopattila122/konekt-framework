@@ -233,7 +233,7 @@ class Konekt_Framework_Core_Model_Request
          break;
          
          default:
-            throw new Exception("Request Method ($method) unkown");
+            throw new Exception("Request Method ($method) unknown");
          break;
       }
       
