@@ -9,7 +9,7 @@
  * @copyright   Copyright (c) 2012 Attila Fulop
  * @author      Attila Fulop
  * @license     GNU LGPL v3 http://www.opensource.org/licenses/lgpl-3.0.html
- * @version     6 2012-04-14
+ * @version     7 2012-04-16
  * @since       2012-03-15
  *
  */
@@ -172,6 +172,13 @@ class Konekt_Framework_Core_Model_Response
     */
    private $_template = '';
    
+   /**
+    * The Template prefix name
+    * 
+    * @var string
+    */
+   private $_templatePrefix = '';
+   
    
    /**
     * Class Constructor; Invokes Smarty initialization
@@ -180,6 +187,8 @@ class Konekt_Framework_Core_Model_Response
    function __construct()
    {
       $this->_setupSmarty();
+      $prefix = Konekt::app()->getConfigValue('core/templatePrefix');
+      $this->_templatePrefix = empty($prefix) ? '' : (string) $prefix;
    }
    
    
@@ -205,7 +214,7 @@ class Konekt_Framework_Core_Model_Response
     */   
    protected function _displaySmarty()
    {
-      $this->_smarty->display($this->_template);
+      $this->_smarty->display($this->_templatePrefix . $this->_template);
       return true;
    }
    
@@ -276,6 +285,19 @@ class Konekt_Framework_Core_Model_Response
    public function setTemplate($template)
    {
       $this->_template = $template;
+   }
+   
+   
+   /**
+    * Set the template prefix. This is useful for applications willing to override default design by
+    * creating a new set of template files with the same name, but prefixed.
+    * 
+    * @param   string   $prefix  The prefix string to be added to the template
+    * 
+    */
+   public function setTemplatePrefix($prefix)
+   {
+      $this->_templatePrefix = $prefix;
    }
    
 
