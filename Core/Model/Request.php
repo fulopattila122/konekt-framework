@@ -83,6 +83,15 @@ class Konekt_Framework_Core_Model_Request
          case 'int': // integer
             return (int) $var;
             break;
+            
+         case 'number': // number with decimals
+            return round((float)$var, 4);
+            break;
+            
+         case 'bool':
+         case 'boolean':
+            return ($var === true || $var == 1 || $var === '1' || $var === 'yes') ? true : false;
+            break;
          
          case 'str': // trim string
             return trim($var);
@@ -285,6 +294,11 @@ class Konekt_Framework_Core_Model_Request
    public function post($key, $default = NULL, $acceptEmpty = true, $filters = NULL)
    {
       return $this->_getRequestVariable('post', $key, $default, $acceptEmpty, $filters);
+   }
+   
+   public function getMethod()
+   {
+      return $_SERVER['REQUEST_METHOD'];
    }
    
 }
