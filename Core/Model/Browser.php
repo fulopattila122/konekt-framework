@@ -9,7 +9,7 @@
  * @copyright   Copyright (c) 2011 - 2012 Attila Fülöp
  * @author      Attila Fülöp
  * @license     GNU LGPL v3 http://www.opensource.org/licenses/lgpl-3.0.html
- * @version     $Revision-Id$ $Date$
+ * @version     4 2012-04-25
  * @since       2011-12-12
  *
  */
@@ -87,4 +87,15 @@ class Konekt_Framework_Core_Model_Browser
       }
       return false;
    }
+   
+   /**
+    * Returns the http user agent string
+    * 
+    * @return  string
+    */
+   public function getUserAgent()
+   {
+      return $_SERVER['HTTP_USER_AGENT'];
+   }
+   
 }

@@ -291,13 +291,14 @@ class Konekt_Framework_Core_Model_App{
    /**
     * Returns a Session variable value
     *
-    * @param string $name The Variable name
+    * @param string $name     The Variable name
+    * @param mixed  $default  The default value to return if value is not set in session
     *
     * @return mixed Returns the value stored in session
     */
-   public function getSessionValue($name)
+   public function getSessionValue($name, $default = null)
    {
-      return $_SESSION["$name"];
+      return isset($_SESSION["$name"]) ? $_SESSION["$name"] : $default;
    }
  
    /**
