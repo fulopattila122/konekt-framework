@@ -9,7 +9,7 @@
  * @copyright   Copyright (c) 2011 - 2012 Attila Fulop
  * @author      Attila Fulop
  * @license     GNU LGPL v3 http://www.opensource.org/licenses/lgpl-3.0.html
- * @version     5 2012-04-14
+ * @version     6 2012-05-12
  * @since       2011-12-11
  *
  */
@@ -25,7 +25,6 @@
  * @package     Framework
  * @subpackage  Core
  */
-
 class Konekt_Framework_Core_Model_App{
 
    const ANY_COUNTRY             = 'XX';
@@ -219,6 +218,12 @@ class Konekt_Framework_Core_Model_App{
       {
          $this->getResponse()->addTemplateDir($tplDir);
       }
+      
+      /** Invokes the Module Init Class if exists */
+      $initClass = $moduleName . '_Init';
+      if (class_exists($initClass)) {
+         $initClass::init($modDir);
+      }
    }
    
    
@@ -406,7 +411,6 @@ class Konekt_Framework_Core_Model_App{
     *
     * @return Konekt_Framework_Core_Model_Config The initialized config object
     */
-   
    public function getConfig()
    {
       if (!$this->_config)

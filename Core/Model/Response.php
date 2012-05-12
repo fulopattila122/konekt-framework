@@ -9,7 +9,7 @@
  * @copyright   Copyright (c) 2012 Attila Fulop
  * @author      Attila Fulop
  * @license     GNU LGPL v3 http://www.opensource.org/licenses/lgpl-3.0.html
- * @version     7 2012-04-16
+ * @version     8 2012-05-12
  * @since       2012-03-15
  *
  */
@@ -193,6 +193,19 @@ class Konekt_Framework_Core_Model_Response
    
    
    /**
+    * Sets up the Smarty directories
+    * 
+    * @param Smarty  $smarty  The smarty instance to set up
+    */
+   private function _setupSmartyDirectories($smarty)
+   {
+      $smarty->compile_dir = Konekt::app()->getVarDir() . '/smarty/templates_c';
+      $smarty->cache_dir   = Konekt::app()->getVarDir() . '/smarty/cache';
+      $smarty->config_dir  = Konekt::app()->getVarDir() . '/smarty/configs';
+   }
+   
+   
+   /**
     * Initializes the global Smarty instance
     *
     */
@@ -201,9 +214,7 @@ class Konekt_Framework_Core_Model_Response
       require_once (Konekt::app()->getLibDir($this) . DS . 'Smarty' . DS . 'Smarty.class.php');
       
       $this->_smarty = new Smarty();
-      $this->_smarty->compile_dir = Konekt::app()->getVarDir() . '/smarty/templates_c';
-      $this->_smarty->cache_dir   = Konekt::app()->getVarDir() . '/smarty/cache';
-      $this->_smarty->config_dir  = Konekt::app()->getVarDir() . '/smarty/configs';
+      $this->_setupSmartyDirectories($this->_smarty);
    }
    
    
@@ -389,6 +400,28 @@ class Konekt_Framework_Core_Model_Response
     public function getSmarty()
     {
        return $this->_smarty;
+    }
+    
+    /**
+    * Retruns a new Smarty Instance (independent from the one for response output)
+    * 
+    * This should be used for getting individual output from templates, eg. E-mail templates.
+    * 
+    * @param   bool  $cloneTemplateDirs   If true, all the template directories (set up by modules)
+    *                                     of the main smarty instance will be added to the newly
+    *                                     created instance
+    * 
+    * @return  Smarty
+    */
+    public function getNewSmartyInstance($cloneTemplateDirs = true)
+    {
+       $result = new Smarty();
+       $this->_setupSmartyDirectories($result);
+       
+       if ($cloneTemplateDirs) {
+          $result->setTemplateDir($this->_smarty->getTemplateDir());
+       }
+       return $result;
     }
    
 }

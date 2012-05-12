@@ -1,5 +1,27 @@
 <?php
+/**
+ * Html.php contains the implementation of core Html Helper class
+ *
+ *
+ * @category    Konekt
+ * @package     Framework
+ * @subpackage  Core
+ * @copyright   Copyright (c) 2012 Attila Fulop
+ * @author      Attila Fulop
+ * @license     GNU LGPL v3 http://www.opensource.org/licenses/lgpl-3.0.html
+ * @version     3 2012-05-12
+ * @since       2012-02-14
+ *
+ */
 
+
+/**
+ * The core Html Helper Class containing utilities for processing html files
+ *
+ * @caegory    Konekt
+ * @package    Framework
+ * @subpackage Core
+ */
 class Konekt_Framework_Core_Helper_Html extends Konekt_Framework_Core_Helper_Abstract{
    
    /**

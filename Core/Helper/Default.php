@@ -1,5 +1,27 @@
 <?php
+/**
+ * Default.php contains the implementation of the default core helper class
+ *
+ *
+ * @category    Konekt
+ * @package     Framework
+ * @subpackage  Core
+ * @copyright   Copyright (c) 2011-2012 Attila Fulop
+ * @author      Attila Fulop
+ * @license     GNU LGPL v3 http://www.opensource.org/licenses/lgpl-3.0.html
+ * @version     5 2012-05-12
+ * @since       2011-12-12
+ *
+ */
 
+
+/**
+ * The core helper class. Mainly helps with paths, filenames and component initialization
+ *
+ * @caegory    Konekt
+ * @package    Framework
+ * @subpackage Core
+ */
 class Konekt_Framework_Core_Helper_Default extends Konekt_Framework_Core_Helper_Abstract{
    
    /**
