@@ -249,7 +249,8 @@ class Konekt_Framework_Core_Model_Response
       $tpl || $tpl = $this->_statusCode . '.tpl';
       $this->_smarty->templateExists($tpl) || $tpl = sprintf(self::DEFAULT_TEMPLATE_BASE, $this->_statusCode);
       
-      header(self::$_statusMessages[$this->_statusCode], true, $this->_statusCode);
+      header($_SERVER['SERVER_PROTOCOL'] . ' ' .$this->_statusCode . ' '
+             . self::$_statusMessages[$this->_statusCode], true, $this->_statusCode);
       if ($this->_smarty->templateExists($tpl))
       {
          $message = $this->_customMessage ? $this->_customMessage : Konekt::app()->getRequest()->uri();

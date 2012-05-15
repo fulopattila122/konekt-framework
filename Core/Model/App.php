@@ -222,7 +222,7 @@ class Konekt_Framework_Core_Model_App{
       /** Invokes the Module Init Class if exists */
       $initClass = $moduleName . '_Init';
       if (class_exists($initClass)) {
-         $initClass::init($modDir);
+         call_user_func(array($initClass, 'init'), $modDir);
       }
    }
    
