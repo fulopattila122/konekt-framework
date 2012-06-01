@@ -105,6 +105,10 @@ class Konekt_Framework_Core_Model_Request
             return htmlspecialchars(trim($var), ENT_NOQUOTES, 'UTF-8' );
             break;
          
+         case 'sqldatetime':
+            return date('Y-m-d H:i', strtotime($var));
+            break;
+         
          case 'ucwords': // trim string, upper case words
             return ucwords(strtolower(trim($var)));
             break;
@@ -247,10 +251,14 @@ class Konekt_Framework_Core_Model_Request
       }
       
       if (!isset($source["$key"])) {
-         $result = $default;
+         return $default;
       }
       elseif (empty($source["$key"])) {
-         $result = $acceptEmpty ? $source["$key"] : $default;
+         if (!$acceptEmpty) {
+            return $default;
+         } else {
+            $result = $source["$key"];
+         }
       }
       else {
          $result = $source["$key"];
