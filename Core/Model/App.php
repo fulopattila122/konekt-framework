@@ -165,7 +165,8 @@ class Konekt_Framework_Core_Model_App{
          $this->_config->dbDatabase,
          'doctrine'
          );
-      $this->connection->setCharset("utf8");
+      
+      $this->connection->setListener( new Konekt_Framework_Core_Model_Connection_Observer() );
    }
    
    
