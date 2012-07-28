@@ -38,7 +38,7 @@ abstract class BaseCountry extends Doctrine_Record
              ));
 
         $this->option('type', 'INNODB');
-        $this->option('collate', 'utf8_hungarian_ci');
+        $this->option('collate', 'utf8_unicode_ci');
         $this->option('charset', 'utf8');
     }
 
