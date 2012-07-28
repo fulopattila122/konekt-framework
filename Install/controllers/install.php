@@ -1,5 +1,9 @@
 <?php
 
+//This is necessary to avoid warnings on the console when inserting data
+//Use any other timezone if necessary
+date_default_timezone_set('Europe/Budapest');
+
 require_once("../../Konekt.php");
 
    function recreateDatabase()

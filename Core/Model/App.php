@@ -153,6 +153,7 @@ class Konekt_Framework_Core_Model_App{
       $this->doctrineManager = Doctrine_Manager::getInstance();
       $this->doctrineManager->setAttribute(Doctrine_Core::ATTR_MODEL_LOADING,
          Doctrine_Core::MODEL_LOADING_CONSERVATIVE);
+      $this->doctrineManager->setAttribute(Doctrine_Core::ATTR_QUOTE_IDENTIFIER, true);
 
       $dbcfg = $this->_config->getValue('core/db');
       if (!$this->_config->dbType || $this->_config->dbType == 'none')
