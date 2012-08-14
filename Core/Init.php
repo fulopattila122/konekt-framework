@@ -37,8 +37,8 @@ class Konekt_Framework_Core_Init{
          include_once('compatibility52.php');
       }
       
-      if (get_magic_quotes_gpc()) {
-         die('Magic quotes are on. They must be disabled in order to Konekt Framework to operate properly');
+      if (version_compare(PHP_VERSION, '5.2.0', '<') && get_magic_quotes_gpc()) {
+         throw new Exception('Magic quotes are on. They must be disabled in order to Konekt Framework to operate properly');
       }
       
       return true;

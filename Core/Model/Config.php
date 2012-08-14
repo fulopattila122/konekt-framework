@@ -6,10 +6,10 @@
  * @category    Konekt
  * @package     Framework
  * @subpackage  Core
- * @copyright   Copyright (c) 2011 - 2012 Attila Fülöp
- * @author      Attila Fülöp
+ * @copyright   Copyright (c) 2011 - 2012 Attila Fulop
+ * @author      Attila Fulop
  * @license     GNU LGPL v3 http://www.opensource.org/licenses/lgpl-3.0.html
- * @version     4 2012-05-12
+ * @version     5 2012-08-14
  * @since       2011-12-12
  *
  */
@@ -20,9 +20,11 @@
  *
  * @category    Konekt
  * @package     Framework
+ * @subpackage  Core
  */
 class Konekt_Framework_Core_Model_Config{
 
+   const APP_CONFIG              = 'app.yml';
    const LOCAL_CONFIG            = 'local.yml';
    const CONF_REL_DIR            = 'etc';
    const SMARTY_REL_DIR          = 'View/templates';
@@ -41,11 +43,17 @@ class Konekt_Framework_Core_Model_Config{
    
    function __construct()
    {
-      $cfgFile = Konekt::app()->getEtcDir() . DS . self::LOCAL_CONFIG;
-      if (!file_exists($cfgFile)) {
+      $appCfgFile = Konekt::app()->getEtcDir() . DS . self::APP_CONFIG;
+      $localCfgFile = Konekt::app()->getEtcDir() . DS . self::LOCAL_CONFIG;
+      if (!file_exists($localCfgFile)) {
          throw new Exception("Config file doesn't exist");
       }
-      $this->_config = sfYaml::load($cfgFile);
+      
+      if (file_exists($appCfgFile)) {
+         $this->_config = array_merge_recursive( sfYaml::load($appCfgFile), sfYaml::load($localCfgFile));
+      } else {
+         $this->_config = sfYaml::load($localCfgFile);
+      }
       if (isset($this->_config['core']['db']['type']) && $this->_config['core']['db']['type'] !== 'none')
       {
          $this->dbHost     = Konekt::helper('core')->decrypt($this->_config['core']['db']['host']);
