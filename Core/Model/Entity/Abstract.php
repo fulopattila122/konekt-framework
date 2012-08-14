@@ -17,6 +17,13 @@
 /**
  * The Common Entity Abstract model class for wrapping Doctrine Entities
  *
+ * You might be looking for magic getter and setter methods that was the first
+ * intention here as well. After reading this:
+ * http://blog.webspecies.co.uk/2011-05-23/the-new-era-of-php-frameworks.html
+ * I decided to omit the magic methods. So in concrete classes you have to do the
+ * tedious work of mapping getters and setters one by one, but according to many other people
+ * it's worth it.
+ *
  * @caegory    Konekt
  * @package    Framework
  * @subpackage Core
