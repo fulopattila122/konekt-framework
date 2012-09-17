@@ -8,7 +8,7 @@
  * @copyright   Copyright (c) 2012 Attila Fulop
  * @author      Attila Fulop
  * @license     GNU LGPL v3 http://www.opensource.org/licenses/lgpl-3.0.html
- * @version     1 2012-07-29
+ * @version     2 2012-09-17
  * @since       2012-07-29
  *
  */
@@ -30,8 +30,8 @@
  */
 abstract class Konekt_Framework_Core_Model_Entity_Abstract {
    
-   /** This const must be overwritten by concrete classes */
-   const ENTITY_NAME = '';
+   /** @var string The Name of the Entity Class in Doctrine. This must be defined by concrete classes */
+   protected $entityName;
    
    /** @var Doctrine_Record The internal underlying Doctrine_Record derived class instance */
    protected $_entity;
@@ -41,11 +41,11 @@ abstract class Konekt_Framework_Core_Model_Entity_Abstract {
     *
     * @return bool True if record existed prior to the function call, false if it was initialized during the call
     */
-   private function _checkRecordInstance()
+   protected function _checkRecordInstance()
    {
       if (!$this->_entity)
       {
-         $this->_entity = new Issue();
+         $this->_entity = new $this->entityName();
          return false;
       }
       else
@@ -67,7 +67,9 @@ abstract class Konekt_Framework_Core_Model_Entity_Abstract {
    public function load($id)
    {
       $this->_checkRecordInstance();
-      if ($this->_entity->load($id)) {
+      $result = $this->_entity->getTable()->find($id);
+      if ($result) {
+         $this->_entity = $result;
          return $this;
       } else {
          return false;
@@ -111,8 +113,22 @@ abstract class Konekt_Framework_Core_Model_Entity_Abstract {
     */
    public static function exists($id)
    {
-      $entity = Doctrine_Core::getTable(self::ENTITY_NAME)->find($id);
+      $entity = Doctrine_Core::getTable($this->entityName)->find($id);
       return $entity ? true : false;
+   }
+   
+   /**
+    * Retruns the Entity Record in Array format
+    *
+    * @return array|bool   Returns array on success false if record is not initialized
+    */
+   public function toArray()
+   {
+      if ($this->_checkRecordInstance()) {
+         return $this->_entity->toArray();
+      } else {
+         return false;
+      }
    }
    
 }
