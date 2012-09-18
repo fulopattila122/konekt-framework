@@ -9,7 +9,7 @@
  * @copyright   Copyright (c) 2012 Attila Fulop
  * @author      Attila Fulop
  * @license     GNU LGPL v3 http://www.opensource.org/licenses/lgpl-3.0.html
- * @version     8 2012-05-12
+ * @version     9 2012-09-18
  * @since       2012-03-15
  *
  */
@@ -424,5 +424,16 @@ class Konekt_Framework_Core_Model_Response
        }
        return $result;
     }
+    
+   
+   /**
+    * Returns the Response's HTTP status code
+    *
+    * @return  int   The response's status code
+    */
+   public function getStatusCode()
+   {
+      return $this->_statusCode;
+   }
    
 }

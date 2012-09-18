@@ -6,10 +6,10 @@
  * @category    Konekt
  * @package     Framework
  * @subpackage  Core
- * @copyright   Copyright (c) 2012 Attila Fülöp
- * @author      Attila Fülöp
+ * @copyright   Copyright (c) 2012 Attila Fulop
+ * @author      Attila Fulop
  * @license     GNU LGPL v3 http://www.opensource.org/licenses/lgpl-3.0.html
- * @version     $Revision-Id$ $Date$
+ * @version     4 2012-09-18
  * @since       2012-02-12
  *
  */
@@ -256,7 +256,7 @@ class Konekt_Framework_Core_Model_Router
     *
     * @param string $source The source file the dispatch request is coming from
     *
-    * @return Konekt_Core_Model_Response Returns the response object
+    * @return Konekt_Framework_Core_Model_Response Returns the response object
     */
    public function dispatch($source)
    {
@@ -275,6 +275,9 @@ class Konekt_Framework_Core_Model_Router
 
       if (!$controller) {
          return $response->err404();
+      } elseif ($response->getStatusCode() == Konekt_Framework_Core_Model_Response::HTTP_FOUND) {
+         //In case the controller constructor sets a redirect, then we return early, gracefully
+         return $response;
       }
       
       $action = $this->_getAction($route['controller']);
