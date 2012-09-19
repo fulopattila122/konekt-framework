@@ -6,10 +6,10 @@
  * @category    Konekt
  * @package     Framework
  * @subpackage  Core
- * @copyright   Copyright (c) 2012 Attila Fülöp
- * @author      Attila Fülöp
+ * @copyright   Copyright (c) 2012 Attila Fulop
+ * @author      Attila Fulop
  * @license     GNU LGPL v3 http://www.opensource.org/licenses/lgpl-3.0.html
- * @version     $Revision-Id$ $Date$
+ * @version     8 2012-09-19
  * @since       2012-02-12
  *
  */
@@ -22,7 +22,19 @@
  */
 class Konekt_Framework_Core_Model_Request
 {   
-   const GEOIP_DIR = 'GeoIP';
+   const GEOIP_DIR      = 'GeoIP';
+   
+   /** HTTP/1.1 methods according to RFC 2616
+    * @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html
+    */
+   const METHOD_POST    = 'POST';
+   const METHOD_GET     = 'GET';
+   const METHOD_HEAD    = 'HEAD';
+   const METHOD_PUT     = 'PUT';
+   const METHOD_DELETE  = 'DELETE';
+   const METHOD_OPTIONS = 'OPTIONS';
+   const METHOD_TRACE   = 'TRACE';
+   const METHOD_CONNECT = 'CONNECT';
    
    /** @var Konekt_Framework_Core_Model_Browser */
    protected $_browser;
